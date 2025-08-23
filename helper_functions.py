@@ -136,3 +136,23 @@ def generate(model, tokenizer, sentence, max_new_tokens=64, skip_special_tokens=
     output = tokenizer.batch_decode(generation_output, 
                                     skip_special_tokens=skip_special_tokens)[0]
     return output
+
+# Adapted from trl.extras.dataset_formatting.instructions_formatting_function
+# Converts dataset from prompt/completion format (not supported anymore)
+# to the conversational format
+def format_dataset(examples):
+    if isinstance(examples["prompt"], list):
+        output_texts = []
+        for i in range(len(examples["prompt"])):
+            converted_sample = [
+                {"role": "user", "content": examples["prompt"][i]},
+                {"role": "assistant", "content": examples["completion"][i]},
+            ]
+            output_texts.append(converted_sample)
+        return {'messages': output_texts}
+    else:
+        converted_sample = [
+            {"role": "user", "content": examples["prompt"]},
+            {"role": "assistant", "content": examples["completion"]},
+        ]
+        return {'messages': converted_sample}

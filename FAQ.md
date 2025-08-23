@@ -104,14 +104,15 @@ There are a few more optional libraries: `ollama`, `unsloth`, `xformers`, and `g
 
 | Library | Version | Library | Version |
 |---|---|---|---|
-| torch | 2.5.1+cu121 | safetensors | 0.4.5 |
-| transformers | 4.46.2 | trl | 0.12.1 |
-| peft | 0.13.2 | bitsandbytes | 0.44.1  |
-| pandas | 2.2.2 | datasets | 3.1.0 |
-| huggingface-hub | 0.26.2 | ollama | 0.4.0 |
-| numpy | 1.26.4 | unsloth | 2024.11.9 |
-| matplotlib | 3.8.0 | xformers | 0.0.28.post3 |
-| accelerate | 1.1.1 | gguf | 0.10.0 |
+| torch | 2.8.0+cu126 | safetensors | 0.6.2 |
+| transformers | 4.55.2 | trl | 0.21.0 |
+| peft | 0.17.0 | bitsandbytes | 0.47.0  |
+| pandas | 2.2.2 | datasets | 4.0.0 |
+| huggingface-hub | 0.34.4 | ollama | 0.9.6 |
+| numpy | 2.0.2 | unsloth | 2025.8.9 |
+| matplotlib | 3.10.0 | xformers | 0.0.32.post2 |
+| accelerate | 1.10.0 | gguf | 0.17.1 |
+| mistral-common | 1.8.4 | protobuf | 3.20.1 |
 
 ### 100% Human Writing
 
