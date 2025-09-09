@@ -129,10 +129,34 @@ def generate(model, tokenizer, sentence, max_new_tokens=64, skip_special_tokens=
     input_ids = tokenized_input["input_ids"].to(model.device)
 
     model.eval()
-    generation_output = model.generate(input_ids=input_ids, 
-                                       eos_token_id=tokenizer.eos_token_id,
-                                       max_new_tokens=max_new_tokens)
+    # if it was trained using mixed precision, uses autocast context
+    ctx = torch.autocast(device_type=model.device.type, dtype=model.dtype) \
+          if model.dtype in [torch.float16, torch.bfloat16] else nullcontext()
+    with ctx:
+        generation_output = model.generate(input_ids=input_ids, 
+                                           eos_token_id=tokenizer.eos_token_id,
+                                           max_new_tokens=max_new_tokens)
     
     output = tokenizer.batch_decode(generation_output, 
                                     skip_special_tokens=skip_special_tokens)[0]
     return output
+
+# Adapted from trl.extras.dataset_formatting.instructions_formatting_function
+# Converts dataset from prompt/completion format (not supported anymore)
+# to the conversational format
+def format_dataset(examples):
+    if isinstance(examples["prompt"], list):
+        output_texts = []
+        for i in range(len(examples["prompt"])):
+            converted_sample = [
+                {"role": "user", "content": examples["prompt"][i]},
+                {"role": "assistant", "content": examples["completion"][i]},
+            ]
+            output_texts.append(converted_sample)
+        return {'messages': output_texts}
+    else:
+        converted_sample = [
+            {"role": "user", "content": examples["prompt"]},
+            {"role": "assistant", "content": examples["completion"]},
+        ]
+        return {'messages': converted_sample}
